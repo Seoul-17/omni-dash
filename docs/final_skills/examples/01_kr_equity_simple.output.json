@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "generated_at": "2026-05-07T10:00:00Z",
+    "skill_version": "3.0.0",
+    "mode": "standard",
+    "audience": "intermediate",
+    "input_period": { "start": "2025-03-12", "end": "2026-04-30" },
+    "base_currency": "KRW",
+    "risk_profile": "moderate",
+    "locale": "ko-KR",
+    "cache_key": "sha256:b7e2d8a1c4f3b2e9",
+    "warnings": ["자산군 단일(equity) — 분산 효과 제한"]
+  },
+  "kpis": [
+    { "id": "kpi_total_return", "label": "총 수익률", "value": 8.2, "unit": "%", "semantic_color": "positive", "ref": { "metric": "cumulative_return", "period": "2025-03-12~2026-04-30", "n": 285 } },
+    { "id": "kpi_sharpe", "label": "샤프 비율", "value": 0.78, "unit": "score", "semantic_color": "negative", "severity": "warn", "ref": { "metric": "sharpe", "period": "2025-03-12~2026-04-30", "n": 285 } },
+    { "id": "kpi_mdd", "label": "MDD", "value": -16.8, "unit": "%", "semantic_color": "negative", "ref": { "metric": "mdd", "period": "2025-03-12~2026-04-30", "n": 285 } }
+  ],
+  "insights": [
+    {
+      "severity": "warn",
+      "icon": "🎯",
+      "title": "삼성전자 단일 비중 과다",
+      "observation": "삼성전자 36%, SK하이닉스 13%로 반도체 섹터 49% 집중",
+      "implication": "섹터 단일 의존도가 분산 효과를 제한하며 반도체 사이클 변동에 비대칭 노출",
+      "recommended_action": "헬스케어·소비재 섹터 ETF 편입 또는 비중 30% 미만으로 트림",
+      "follow_up_metrics": ["concentration.equity", "correlation_matrix"],
+      "ref": { "metric": "concentration", "period": "2026-04-30", "n": 8 }
+    },
+    {
+      "severity": "warn",
+      "icon": "🔻",
+      "title": "샤프 비율 자산군 임계 미달",
+      "observation": "샤프 0.78로 equity 임계(1.0) 미달",
+      "implication": "총 위험 대비 보상이 양호 수준 미달, 위험 대비 수익 효율 개선 필요",
+      "recommended_action": "리밸런싱 또는 변동성 감소를 위한 채권·금 편입 검토",
+      "follow_up_metrics": ["sharpe", "downside_dev"],
+      "ref": { "metric": "sharpe", "period": "2025-03-12~2026-04-30", "n": 285 }
+    }
+  ],
+  "raw_metrics": {
+    "returns": { "simple": 0.082, "log": 0.079, "cumulative": 0.082, "cagr": 0.072 },
+    "risk": {
+      "mdd": -16.8,
+      "recovery_days": 95,
+      "downside_dev": 0.11,
+      "sortino": 0.65,
+      "var_95": -2.1,
+      "cvar_95": -3.0,
+      "calmar": 0.43,
+      "asset_class_thresholds": { "equity": "warn" }
+    },
+    "risk_adjusted": {
+      "sharpe": 0.78,
+      "treynor": 0.061,
+      "info_ratio": -0.12,
+      "alpha": -0.008,
+      "beta": 1.15,
+      "r_squared": 0.82
+    },
+    "benchmark": { "id": "KODEX 200", "performance": 0.113 },
+    "sample_size": 285
+  }
+}

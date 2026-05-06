@@ -1,0 +1,8 @@
+asset_id,asset_class,quantity,avg_cost,acquired_at,base_currency
+005930.KS,equity,50,72000,2025-03-12,KRW
+QQQ,etf,10,480.50,2025-06-01,USD
+BTC-USD,crypto,0.05,65000,2025-09-20,USD
+KR1Y_BOND,bond,100,98.5,2025-01-15,KRW
+GLD,commodity,8,210.40,2025-08-14,USD
+ETH-USD,crypto,0.8,3200,2025-10-05,USD
+TLT,bond,12,92.10,2025-09-25,USD

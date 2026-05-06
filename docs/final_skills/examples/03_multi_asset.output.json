@@ -1,0 +1,265 @@
+{
+  "meta": {
+    "generated_at": "2026-05-07T10:00:00Z",
+    "skill_version": "3.0.0",
+    "mode": "standard",
+    "audience": "intermediate",
+    "input_period": { "start": "2025-01-15", "end": "2026-04-30" },
+    "base_currency": "KRW",
+    "risk_profile": "moderate",
+    "locale": "ko-KR",
+    "cache_key": "sha256:a3f9c2b1d4e5f6a7",
+    "warnings": [
+      "BTC-USD 표본 < 60일, 통계적 유의성 보통",
+      "ETH-USD 표본 < 60일, 통계적 유의성 보통"
+    ]
+  },
+  "kpis": [
+    {
+      "id": "kpi_total_return",
+      "label": "총 수익률",
+      "value": 14.7,
+      "unit": "%",
+      "change": 3.2,
+      "semantic_color": "positive",
+      "ref": { "metric": "cumulative_return", "period": "2025-01-15~2026-04-30", "n": 320 }
+    },
+    {
+      "id": "kpi_sharpe",
+      "label": "샤프 비율",
+      "value": 1.38,
+      "unit": "score",
+      "semantic_color": "positive",
+      "ref": { "metric": "sharpe", "period": "2025-01-15~2026-04-30", "n": 320 }
+    },
+    {
+      "id": "kpi_mdd",
+      "label": "MDD",
+      "value": -22.4,
+      "unit": "%",
+      "semantic_color": "negative",
+      "severity": "warn",
+      "ref": { "metric": "mdd", "period": "2025-01-15~2026-04-30", "n": 320 }
+    },
+    {
+      "id": "kpi_calmar",
+      "label": "칼마 비율",
+      "value": 0.49,
+      "unit": "score",
+      "semantic_color": "negative",
+      "severity": "warn",
+      "ref": { "metric": "calmar", "period": "2025-01-15~2026-04-30", "n": 320 }
+    },
+    {
+      "id": "kpi_cvar_95",
+      "label": "CVaR 95%",
+      "value": -4.1,
+      "unit": "%",
+      "semantic_color": "negative",
+      "severity": "warn",
+      "ref": { "metric": "cvar_95", "period": "2025-01-15~2026-04-30", "n": 320 }
+    }
+  ],
+  "charts": [
+    {
+      "id": "chart_main_timeseries",
+      "type": "multi_line",
+      "title": "포트폴리오 vs 벤치마크 추이 (시작점 100 정규화)",
+      "data": {
+        "x": ["2025-01-15", "2025-04-30", "2025-07-31", "2025-10-31", "2026-01-31", "2026-04-30"],
+        "y": [[100, 105.2, 108.4, 102.1, 110.8, 114.7], [100, 103.5, 106.2, 104.8, 108.2, 111.3]],
+        "series": ["포트폴리오", "KOSPI 200"]
+      },
+      "encoding": {
+        "x_axis": { "label": "기간", "type": "time" },
+        "y_axis": { "label": "정규화 수익률", "type": "linear", "zero_baseline": false },
+        "color_map": { "포트폴리오": "#2563EB", "KOSPI 200": "#94A3B8" }
+      },
+      "annotations": [
+        { "x": "2025-09-20", "y": 102.1, "text": "BTC 매수 (변동성 확대)" }
+      ],
+      "source": "Yahoo Finance / KRX / 2026-04-30 종가"
+    },
+    {
+      "id": "chart_composition",
+      "type": "treemap",
+      "title": "자산 비중 (면적) × 수익률 (색상)",
+      "data": {
+        "x": ["005930.KS", "QQQ", "BTC-USD", "KR1Y_BOND", "GLD", "ETH-USD", "TLT"],
+        "y": [0.32, 0.18, 0.22, 0.10, 0.08, 0.07, 0.03]
+      },
+      "encoding": {
+        "color_map": {
+          "005930.KS": "#16A34A", "QQQ": "#16A34A",
+          "BTC-USD": "#DC2626", "KR1Y_BOND": "#64748B",
+          "GLD": "#16A34A", "ETH-USD": "#DC2626", "TLT": "#64748B"
+        }
+      },
+      "source": "포트폴리오 잔고 / 2026-04-30"
+    },
+    {
+      "id": "chart_underwater",
+      "type": "underwater",
+      "title": "MDD 추적 (Underwater Chart)",
+      "data": {
+        "x": ["2025-02", "2025-05", "2025-08", "2025-11", "2026-02", "2026-04"],
+        "y": [0, -3.2, -8.5, -22.4, -15.1, -8.7]
+      },
+      "encoding": {
+        "x_axis": { "label": "기간", "type": "time" },
+        "y_axis": { "label": "낙폭 (%)", "type": "linear", "zero_baseline": true },
+        "color_map": { "default": "#DC2626" }
+      },
+      "annotations": [
+        { "x": "2025-11", "y": -22.4, "text": "최대 낙폭 (2025-11)" }
+      ],
+      "source": "포트폴리오 일별 NAV"
+    }
+  ],
+  "report": {
+    "B": {
+      "bluf": "지난 15개월 포트폴리오 수익률 +14.7%로 KOSPI 200 대비 +3.4%p 초과 성과를 기록했으나, MDD -22.4%가 자산군 가중 임계 -19%를 초과해 자본 잠식 리스크가 확대됨.",
+      "kpis": []
+    },
+    "U": {
+      "context": "분석 기간 한국 시장은 고금리(기준금리 3.5%) · 원화 약세 · 반도체 사이클 회복으로 변동성이 확대됨. 글로벌 시장은 AI 테마 주도 강세장이 지속되었음.",
+      "benchmark": {
+        "benchmark_id": "KODEX 200",
+        "absolute_return": 11.3,
+        "relative_return": 3.4,
+        "tracking_error": 4.2,
+        "attribution": []
+      }
+    },
+    "I": {
+      "contributors": [
+        { "asset_id": "QQQ", "asset_name": "Invesco QQQ", "contribution_pct": 4.8, "weight": 0.18, "return_pct": 26.7 },
+        { "asset_id": "005930.KS", "asset_name": "삼성전자", "contribution_pct": 3.2, "weight": 0.32, "return_pct": 10.0 },
+        { "asset_id": "GLD", "asset_name": "SPDR Gold", "contribution_pct": 1.5, "weight": 0.08, "return_pct": 18.8 }
+      ],
+      "detractors": [
+        { "asset_id": "BTC-USD", "asset_name": "Bitcoin", "contribution_pct": -2.1, "weight": 0.22, "return_pct": -9.5 },
+        { "asset_id": "ETH-USD", "asset_name": "Ethereum", "contribution_pct": -0.8, "weight": 0.07, "return_pct": -11.4 }
+      ],
+      "anchor_chart_id": "chart_main_timeseries"
+    },
+    "L": {
+      "risk_metrics": {
+        "mdd": -22.4,
+        "recovery_days": 175,
+        "downside_dev": 0.14,
+        "sortino": 0.92,
+        "var_95": -2.8,
+        "cvar_95": -4.1,
+        "calmar": 0.49,
+        "asset_class_thresholds": {
+          "equity": "info",
+          "etf": "info",
+          "bond": "info",
+          "crypto": "critical",
+          "commodity": "info"
+        }
+      },
+      "scenarios": [
+        { "label": "optimistic", "expected_return": 18.5, "expected_mdd": -12.0, "assumptions": ["반도체 사이클 강세 지속", "BTC 60K 하방 지지"] },
+        { "label": "base", "expected_return": 8.0, "expected_mdd": -20.0, "assumptions": ["현 거시 환경 유지"] },
+        { "label": "pessimistic", "expected_return": -5.0, "expected_mdd": -35.0, "assumptions": ["BTC 50K 이탈", "삼성전자 8만전자 미회복"] }
+      ]
+    },
+    "D": {
+      "actions": [
+        {
+          "action": "trim",
+          "asset_id": "BTC-USD",
+          "target_weight": 0.10,
+          "deadline": "2026-05-31",
+          "rationale": "→ 02_metrics_skills.md §2.4.1 crypto 단일 자산 집중 임계(15%) 초과"
+        },
+        {
+          "action": "add",
+          "asset_id": "TLT",
+          "target_weight": 0.10,
+          "deadline": "2026-06-15",
+          "rationale": "암호자산 트림 후 비상관 자산(장기 국채) 편입으로 분산 효과 회복"
+        },
+        {
+          "action": "review",
+          "asset_id": "005930.KS",
+          "rationale": "단일 비중 32%로 equity 집중 임계(30%) 근접, 다음 분기 재검토"
+        }
+      ],
+      "monitoring": ["mdd", "concentration.crypto", "concentration.equity", "correlation_matrix", "recovery_days", "cvar_95"]
+    }
+  },
+  "insights": [
+    {
+      "severity": "critical",
+      "icon": "🎯",
+      "title": "BTC 자산군 집중 경고",
+      "observation": "BTC-USD 비중 22%로 crypto 자산군 임계(15%)를 7%p 초과",
+      "implication": "암호자산 단일 노출이 전체 변동성을 비대칭적으로 증폭시켜 MDD 임계 초과의 주 원인으로 작용",
+      "recommended_action": "BTC 비중 10%로 트림(trim) 후 비상관 자산(TLT/GLD) 편입 검토",
+      "follow_up_metrics": ["weight.BTC-USD", "correlation.BTC-USD~portfolio"],
+      "ref": { "metric": "concentration", "period": "2026-04-30", "n": 1 }
+    },
+    {
+      "severity": "warn",
+      "icon": "⚠️",
+      "title": "MDD 자산군 가중 임계 초과",
+      "observation": "MDD -22.4%로 자산군 가중 임계 -19%를 -3.4%p 초과",
+      "implication": "자본 잠식 리스크 확대 구간 진입, 회복 기간 175영업일로 8개월 소요",
+      "recommended_action": "방어 자산(채권/금) 비중 5~10%p 상향 검토",
+      "follow_up_metrics": ["mdd", "recovery_days", "downside_dev"],
+      "ref": { "metric": "mdd", "period": "2025-01-15~2026-04-30", "n": 320 }
+    },
+    {
+      "severity": "info",
+      "icon": "📈",
+      "title": "벤치마크 초과 성과",
+      "observation": "KOSPI 200 대비 +3.4%p 초과 성과, 정보 비율 0.81",
+      "implication": "QQQ·GLD의 분산 편입이 한국 시장 변동성을 일부 상쇄했으나 BTC 변동성이 효과 일부 상쇄",
+      "recommended_action": "분산 효과 유지를 위한 비상관 자산군 비중 모니터링",
+      "follow_up_metrics": ["info_ratio", "tracking_error"],
+      "ref": { "metric": "relative_return", "period": "2025-01-15~2026-04-30", "n": 320 }
+    }
+  ],
+  "raw_metrics": {
+    "returns": {
+      "simple": 0.147,
+      "log": 0.137,
+      "cumulative": 0.147,
+      "cagr": 0.115,
+      "pre_tax": 0.147,
+      "post_tax": 0.124
+    },
+    "risk": {
+      "mdd": -22.4,
+      "recovery_days": 175,
+      "downside_dev": 0.14,
+      "sortino": 0.92,
+      "var_95": -2.8,
+      "cvar_95": -4.1,
+      "calmar": 0.49,
+      "asset_class_thresholds": {
+        "equity": "info",
+        "etf": "info",
+        "bond": "info",
+        "crypto": "critical",
+        "commodity": "info"
+      }
+    },
+    "risk_adjusted": {
+      "sharpe": 1.38,
+      "treynor": 0.084,
+      "info_ratio": 0.81,
+      "alpha": 0.024,
+      "beta": 1.12,
+      "r_squared": 0.68
+    },
+    "benchmark": {
+      "id": "KODEX 200",
+      "performance": 0.113
+    },
+    "sample_size": 320
+  }
+}
