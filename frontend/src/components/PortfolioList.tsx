@@ -27,16 +27,21 @@ export default function PortfolioList() {
         <Link
           key={p.id}
           href={`/dashboard/${p.id}`}
-          className="card p-4 hover:border-blue-400 hover:shadow-md transition"
+          className="card group p-4 hover:border-blue-300 hover:shadow-[0_4px_16px_-8px_rgba(15,23,42,0.12)] transition"
         >
-          <div className="font-medium text-slate-800 truncate">{p.name}</div>
-          <div className="text-xs text-slate-500 mt-1">
-            {new Date(p.createdAt).toLocaleString('ko-KR')}
+          <div className="flex items-start justify-between gap-2 mb-1.5">
+            <div className="font-semibold text-slate-900 text-[14px] truncate">{p.name}</div>
+            <svg viewBox="0 0 12 12" className="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-700 group-hover:translate-x-0.5 transition shrink-0">
+              <path d="M3 6H9M9 6L6 3M9 6L6 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            </svg>
           </div>
-          <div className="text-xs text-slate-500 mt-2 flex gap-2">
-            <span className="badge bg-slate-100 text-slate-600">{p.source}</span>
-            <span className="badge bg-slate-100 text-slate-600">{p.baseCurrency}</span>
-            <span className="badge bg-slate-100 text-slate-600">{p.audience}</span>
+          <div className="font-mono text-[11px] tabular text-slate-400 mb-3">
+            {new Date(p.createdAt).toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' })}
+          </div>
+          <div className="flex flex-wrap gap-1">
+            <span className="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200/80">{p.source}</span>
+            <span className="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200/80">{p.baseCurrency}</span>
+            <span className="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200/80">{p.audience}</span>
           </div>
         </Link>
       ))}
