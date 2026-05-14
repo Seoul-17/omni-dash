@@ -3,23 +3,60 @@
 @tailwind utilities;
 
 @layer base {
-  html, body {
-    @apply bg-slate-50 text-slate-900;
+  html {
+    /* App UI: 미세한 그리드 배경으로 금융 차트 도구의 분위기. 본문 카드는 흰색이라 충돌 없음 */
+    background-image:
+      linear-gradient(to bottom, rgba(241, 245, 249, 0.6) 0%, rgba(241, 245, 249, 1) 100%),
+      radial-gradient(circle at 1px 1px, rgba(15, 23, 42, 0.05) 1px, transparent 0);
+    background-size: 100% 100%, 24px 24px;
+    background-attachment: fixed;
   }
   body {
-    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    @apply text-slate-900;
+    /* Pretendard Variable 우선 — 한국어 + 라틴 모두 커버, font-weight 100-900 */
+    font-family: "Pretendard Variable", Pretendard, var(--font-sans), -apple-system, system-ui, sans-serif;
+    font-feature-settings: 'ss01', 'ss02'; /* Pretendard stylistic sets — 더 모던 */
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  /* 숫자는 항상 tabular */
+  .num, .tabular {
+    font-variant-numeric: tabular-nums slashed-zero;
   }
 }
 
 @layer components {
   .card {
-    @apply bg-white rounded-xl border border-slate-200 shadow-sm;
+    /* App UI: bubbly radius 회피 — 약간만 둥글게. 미세한 inset highlight. */
+    @apply bg-white border border-slate-200/80 rounded-lg shadow-[0_1px_2px_rgba(15,23,42,0.04)];
+  }
+  .card-elevated {
+    @apply bg-white border border-slate-200/80 rounded-lg
+           shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.08)];
+  }
+  /* KPI hero — 가장 중요한 지표 */
+  .kpi-hero {
+    @apply card-elevated p-6 relative overflow-hidden;
+  }
+  .kpi-hero::before {
+    content: "";
+    @apply absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent;
   }
   .badge {
-    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium;
+    @apply inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold tracking-tracked-up uppercase;
   }
-  .badge-info { @apply bg-blue-50 text-blue-700; }
-  .badge-warn { @apply bg-amber-50 text-amber-700; }
-  .badge-critical { @apply bg-red-50 text-red-700; }
+  .badge-info { @apply bg-blue-50 text-blue-700 ring-1 ring-blue-100; }
+  .badge-warn { @apply bg-amber-50 text-amber-700 ring-1 ring-amber-100; }
+  .badge-critical { @apply bg-red-50 text-red-700 ring-1 ring-red-100; }
+  .badge-positive { @apply bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100; }
+
+  /* 색상 거버넌스 — 의미별 단일 매핑 (Skills 03 §3.2) */
+  .text-value-positive { @apply text-emerald-600; }
+  .text-value-negative { @apply text-red-600; }
+  .text-value-neutral  { @apply text-slate-700; }
+
+  /* 섹션 헤더 — 작은 캡스, 약간 트래킹 */
+  .section-eyebrow {
+    @apply text-[11px] font-semibold tracking-tracked-up uppercase text-slate-500;
+  }
 }

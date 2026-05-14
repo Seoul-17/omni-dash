@@ -1,5 +1,22 @@
 import type { Metadata } from 'next';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 import '../styles/globals.css';
+
+// Pretendard는 next/font로 직접 로드가 어려워 CDN 사용. Inter는 fallback.
+// 헤딩에는 Pretendard(한글 + 묵직한 sans), 본문에는 Inter,
+// 숫자/KPI에는 JetBrains Mono (tabular-nums + 금융 도구의 신뢰성).
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const mono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+});
 
 export const metadata: Metadata = {
   title: 'Omni-Dash — 금융 투자 대시보드 자동 생성',
@@ -8,7 +25,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={`${inter.variable} ${mono.variable}`}>
+      <head>
+        {/* Pretendard — 한국어 금융 UI의 사실상 표준 */}
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+        />
+      </head>
       <body>
         <div className="min-h-screen">
           <header className="border-b border-slate-200 bg-white">
