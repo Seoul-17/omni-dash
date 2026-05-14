@@ -1,0 +1,89 @@
+# Skills 02 §2.4.1 자산군별 차등 임계값.
+# 본 파일을 수정하면 시연 3 "Skills.md 텍스트 수정 → 즉시 반영"이 동작한다.
+# 외부 SKILLS_CONFIG_PATH 환경변수에 디렉토리를 지정하면 그 위치의 thresholds.yml로 핫리로드된다.
+
+version: "3.0.0"
+
+# 일반 파라미터 (Skills 02 §2.4)
+parameters:
+  risk_free_rate: 0.04
+  trading_days_per_year: 252
+  mar_default: 0.04
+  var_confidence: 0.95
+  recovery_warning_days: 252
+
+# audience × risk_profile 별 조정 (Skills 02 §2.4.1: ±20% 조정)
+risk_profile_adjust:
+  conservative: -0.2
+  moderate: 0.0
+  aggressive: 0.2
+
+# 자산군별 임계 (가이드: 02_metrics_skills.md §2.4.1 표)
+asset_classes:
+  equity:
+    sigma_normal: [0.15, 0.25]      # 연환산 σ 정상 범위
+    mdd_warn: -0.20                 # 자본 잠식 경고선
+    beta_high: 1.3
+    sharpe_good: 1.0
+    calmar_good: 0.5
+    cvar_warn: -0.03                # 일별
+    concentration_warn: 0.30        # 단일 자산
+  etf:
+    sigma_normal: [0.10, 0.20]
+    mdd_warn: -0.15
+    beta_high: 1.2
+    sharpe_good: 0.8
+    calmar_good: 0.4
+    cvar_warn: -0.02
+    concentration_warn: 0.40
+  bond:
+    sigma_normal: [0.03, 0.08]
+    mdd_warn: -0.10
+    beta_high: 0.5
+    sharpe_good: 0.4
+    calmar_good: 0.2
+    cvar_warn: -0.01
+    concentration_warn: 0.50
+  crypto:
+    sigma_normal: [0.60, 1.20]
+    mdd_warn: -0.50
+    beta_high: 1.5
+    sharpe_good: 1.5
+    calmar_good: 0.7
+    cvar_warn: -0.10
+    concentration_warn: 0.15
+  commodity:
+    sigma_normal: [0.20, 0.35]
+    mdd_warn: -0.30
+    beta_high: 1.2
+    sharpe_good: 0.6
+    calmar_good: 0.3
+    cvar_warn: -0.04
+    concentration_warn: 0.20
+  fund:
+    sigma_normal: [0.10, 0.22]
+    mdd_warn: -0.18
+    beta_high: 1.2
+    sharpe_good: 0.8
+    calmar_good: 0.4
+    cvar_warn: -0.025
+    concentration_warn: 0.35
+
+# 자산군별 가격 시뮬레이션 파라미터 (Geometric Brownian Motion).
+# 입력에 가격 시계열이 없을 때 결정적 합성 시계열을 생성하기 위함.
+# mu = 연환산 기대수익, sigma = 연환산 변동성
+simulation:
+  trading_days: 320
+  equity:    { mu: 0.10, sigma: 0.22 }
+  etf:       { mu: 0.09, sigma: 0.16 }
+  bond:      { mu: 0.04, sigma: 0.06 }
+  crypto:    { mu: 0.30, sigma: 0.90 }
+  commodity: { mu: 0.06, sigma: 0.28 }
+  fund:      { mu: 0.08, sigma: 0.18 }
+
+# 벤치마크 기본값
+benchmark_default:
+  KRW: "KODEX 200"
+  USD: "SPY"
+  EUR: "STOXX 600"
+  default: "ACWI"

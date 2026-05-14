@@ -1,0 +1,37 @@
+# Env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Backend (Gradle / Java)
+backend/.gradle/
+backend/build/
+backend/out/
+backend/bin/
+backend/logs/
+backend/HELP.md
+
+# Frontend (Node / Next.js)
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/dist/
+frontend/*.log
+frontend/.turbo/
+frontend/coverage/
+
+# Docker
+*.pid
+.gstack/
+.claude/scheduled_tasks.lock

@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/omnidash
+  jpa:
+    hibernate:
+      ddl-auto: validate
+logging:
+  level:
+    com.omnidash: DEBUG
