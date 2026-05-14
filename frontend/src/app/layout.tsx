@@ -34,25 +34,41 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <div className="min-h-screen">
-          <header className="border-b border-slate-200 bg-white">
-            <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
-              <a href="/" className="flex items-center gap-2">
-                <span className="text-xl font-bold tracking-tight">
-                  <span className="text-blue-600">Omni</span>-Dash
+        <div className="min-h-screen flex flex-col">
+          <header className="sticky top-0 z-30 backdrop-blur-md bg-white/85 border-b border-slate-200/80">
+            <div className="mx-auto max-w-7xl px-6 h-14 flex items-center justify-between">
+              <a href="/" className="flex items-center gap-2.5 group">
+                {/* 로고: 작은 차트 모양 글리프 + 워드마크 */}
+                <span className="relative inline-flex items-center justify-center w-7 h-7 rounded-md bg-slate-900 text-white">
+                  <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4">
+                    <path d="M2 12V10M6 12V6M10 12V8M14 12V4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+                  </svg>
                 </span>
-                <span className="text-xs px-2 py-0.5 bg-slate-100 rounded text-slate-600">v3.0</span>
+                <span className="font-semibold text-[15px] tracking-tightest text-slate-900">
+                  Omni<span className="text-blue-600">·</span>Dash
+                </span>
+                <span className="badge badge-info">v3.0</span>
               </a>
-              <nav className="flex items-center gap-4 text-sm">
-                <a href="/" className="text-slate-600 hover:text-slate-900">업로드</a>
-                <a href="https://github.com/" className="text-slate-600 hover:text-slate-900">GitHub</a>
+              <nav className="flex items-center gap-1 text-[13px] font-medium">
+                <a href="/" className="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition">
+                  업로드
+                </a>
+                <a href="https://github.com/" className="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition">
+                  GitHub
+                </a>
               </nav>
             </div>
           </header>
-          <main>{children}</main>
-          <footer className="border-t border-slate-200 mt-12 bg-white">
-            <div className="mx-auto max-w-7xl px-6 py-6 text-xs text-slate-500">
-              본 분석은 정보 제공 목적이며 투자 자문이 아닙니다. (Skills 00 §0.5.2 면책)
+          <main className="flex-1">{children}</main>
+          <footer className="border-t border-slate-200/80 mt-16 bg-white/50">
+            <div className="mx-auto max-w-7xl px-6 py-5 flex flex-wrap items-center justify-between gap-3 text-[11px] text-slate-500">
+              <span>
+                본 분석은 정보 제공 목적이며 투자 자문이 아닙니다.
+                <span className="text-slate-400 ml-1">(Skills 00 §0.5.2)</span>
+              </span>
+              <span className="font-mono tabular text-slate-400">
+                Skills · v3.0.0
+              </span>
             </div>
           </footer>
         </div>

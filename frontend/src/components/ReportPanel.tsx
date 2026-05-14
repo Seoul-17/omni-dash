@@ -1,13 +1,15 @@
 import type { Report } from '@/types/dashboard';
 import { formatPercent } from '@/lib/format';
 
-export default function ReportPanel({ report }: { report: Report }) {
+export default function ReportPanel({ report, hideBluf }: { report: Report; hideBluf?: boolean }) {
   return (
-    <div className="space-y-6">
-      {/* B — BLUF */}
-      <Section title="B · 한 줄 요약 (BLUF)">
-        <p className="text-slate-700">{report.B.bluf}</p>
-      </Section>
+    <div className="space-y-4">
+      {/* B — BLUF (페이지 상단에 별도 노출되는 경우 hideBluf=true) */}
+      {!hideBluf && (
+        <Section title="B · 한 줄 요약 (BLUF)">
+          <p className="text-slate-700">{report.B.bluf}</p>
+        </Section>
+      )}
 
       {/* U — Context */}
       <Section title={`U · 시장 컨텍스트 (vs ${report.U.benchmark.benchmark_id})`}>
@@ -73,9 +75,17 @@ export default function ReportPanel({ report }: { report: Report }) {
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  // 헤더 구조: 작은 캡스 라벨 + 본문
+  const [code, ...rest] = title.split(' · ');
   return (
     <div className="card p-5">
-      <h3 className="font-semibold text-slate-800 mb-3">{title}</h3>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="font-mono text-[11px] font-semibold tracking-tracked-up uppercase text-slate-400">
+          {code}
+        </span>
+        <span className="h-px flex-1 bg-slate-200/80" />
+        <h3 className="font-semibold text-slate-800 text-[13px]">{rest.join(' · ')}</h3>
+      </div>
       {children}
     </div>
   );

@@ -1,4 +1,4 @@
-// 라우트 파라미터명은 [sessionId]지만 실제로는 portfolioId를 받는다 (백엔드 /api/dashboard/{portfolioId}).
+// 라우트 파라미터명은 [sessionId]지만 실제로는 portfolioId를 받는다.
 // Next.js dynamic segment naming은 라우팅 용도일 뿐 의미적 강제는 없음.
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -8,6 +8,7 @@ import InsightCard from '@/components/InsightCard';
 import ChartRenderer from '@/components/charts/ChartRenderer';
 import ReportPanel from '@/components/ReportPanel';
 import SkillsReloadButton from '@/components/SkillsReloadButton';
+import RawMetricsDisclosure from '@/components/RawMetricsDisclosure';
 import type { DashboardOutput } from '@/types/dashboard';
 
 const INTERNAL_BASE = process.env.INTERNAL_API_BASE_URL || 'http://localhost:8080';
@@ -20,8 +21,6 @@ async function fetchDashboard(portfolioId: string, mode: string | undefined): Pr
     headers: { cookie },
     cache: 'no-store',
   });
-  // 세션 부재(400) · 권한 없음(401·403) · 미존재(404) 모두 NotFound 처리.
-  // 다른 브라우저로 URL을 직접 열거나 세션 만료된 경우의 흔한 패스.
   if ([400, 401, 403, 404].includes(res.status)) return null;
   if (!res.ok) {
     let body: any = null;
@@ -37,107 +36,152 @@ export default async function DashboardPage({
   params: { sessionId: string };
   searchParams: { mode?: string };
 }) {
-  const portfolioId = params.sessionId; // 라우트 이름과 실제 값 디커플링
+  const portfolioId = params.sessionId;
   const data = await fetchDashboard(portfolioId, searchParams?.mode);
   if (!data) notFound();
 
+  // KPI hierarchy 분리: 첫 2개 = hero, 나머지 = default grid
+  const heroKpis = data.kpis.slice(0, 2);
+  const restKpis = data.kpis.slice(2);
+
   return (
-    <div className="mx-auto max-w-7xl px-6 py-8 space-y-6">
-      {/* 헤더 */}
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <Link href="/" className="text-xs text-slate-500 hover:text-slate-700">← 새 분석</Link>
-          <h1 className="text-2xl font-bold tracking-tight mt-1">
-            {data.meta.portfolios?.[0]?.name || '대시보드'}
+    <div className="mx-auto max-w-7xl px-6 py-8 space-y-10">
+      {/* ─── 헤더 ─── */}
+      <header className="flex flex-wrap items-end justify-between gap-4 pb-4 border-b border-slate-200/80">
+        <div className="min-w-0">
+          <Link href="/" className="inline-flex items-center gap-1 text-[11px] text-slate-500 hover:text-slate-900 mb-2 transition">
+            <svg viewBox="0 0 12 12" fill="none" className="w-3 h-3"><path d="M7.5 3L4.5 6L7.5 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            새 분석
+          </Link>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tightest text-slate-900 truncate">
+            {data.meta.portfolios?.[0]?.name || 'Dashboard'}
           </h1>
-          <div className="text-xs text-slate-500 mt-1 flex flex-wrap gap-2">
-            <span>Skills v{data.meta.skill_version}</span>
-            <span>·</span>
-            <span>mode={data.meta.mode}</span>
-            <span>·</span>
-            <span>audience={data.meta.audience}</span>
-            <span>·</span>
-            <span>{data.meta.input_period.start} ~ {data.meta.input_period.end}</span>
-            {data.meta.cache_key && <span className="text-slate-400">· {data.meta.cache_key.slice(0, 20)}</span>}
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500">
+            <Meta label="Skills" value={`v${data.meta.skill_version}`} />
+            <Sep />
+            <Meta label="Mode" value={data.meta.mode} highlight />
+            <Sep />
+            <Meta label="Audience" value={data.meta.audience} />
+            <Sep />
+            <Meta label="Period" value={`${data.meta.input_period.start} → ${data.meta.input_period.end}`} mono />
+            {data.meta.cache_key && (<>
+              <Sep />
+              <Meta label="Cache" value={data.meta.cache_key.replace('sha256:', '').slice(0, 8)} mono />
+            </>)}
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <ModeSwitch current={data.meta.mode} portfolioId={portfolioId} />
           <SkillsReloadButton />
         </div>
-      </div>
+      </header>
 
-      {/* 경고 */}
+      {/* ─── 경고 ─── */}
       {data.meta.warnings && data.meta.warnings.length > 0 && (
-        <div className="card p-3 border-amber-200 bg-amber-50">
-          <ul className="text-xs text-amber-800 list-disc list-inside space-y-0.5">
-            {data.meta.warnings.map((w, i) => <li key={i}>{w}</li>)}
-          </ul>
-        </div>
-      )}
-
-      {/* KPI 그리드 */}
-      <section>
-        <h2 className="text-sm font-semibold text-slate-700 mb-3">핵심 지표</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-          {data.kpis.map((kpi) => <KpiCard key={kpi.id} kpi={kpi} />)}
-        </div>
-      </section>
-
-      {/* 차트 그리드 */}
-      {data.charts.length > 0 && (
-        <section>
-          <h2 className="text-sm font-semibold text-slate-700 mb-3">시각화</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {data.charts.map((c) => <ChartRenderer key={c.id} spec={c} />)}
+        <section className="card border-amber-200 bg-amber-50/40 p-3">
+          <div className="flex items-start gap-2">
+            <span className="text-amber-600 mt-0.5">⚠️</span>
+            <ul className="text-[12px] text-amber-800 space-y-0.5 leading-relaxed">
+              {data.meta.warnings.map((w, i) => <li key={i}>{w}</li>)}
+            </ul>
           </div>
         </section>
       )}
 
-      {/* 인사이트 */}
+      {/* ─── BUILD B: BLUF (가장 위로) ─── */}
+      {data.report?.B && (
+        <section>
+          <div className="section-eyebrow mb-2">B · 한 줄 요약</div>
+          <p className="text-lg leading-relaxed text-slate-800 max-w-4xl">
+            {data.report.B.bluf}
+          </p>
+        </section>
+      )}
+
+      {/* ─── KPI: Hero 2개 + 나머지 그리드 ─── */}
+      <section>
+        <div className="section-eyebrow mb-3">핵심 지표</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+          {heroKpis.map(k => <KpiCard key={k.id} kpi={k} variant="hero" />)}
+        </div>
+        {restKpis.length > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+            {restKpis.map(k => <KpiCard key={k.id} kpi={k} />)}
+          </div>
+        )}
+      </section>
+
+      {/* ─── 차트 ─── */}
+      {data.charts.length > 0 && (
+        <section>
+          <div className="section-eyebrow mb-3">시각화 · {data.charts.length}개</div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {data.charts.map(c => <ChartRenderer key={c.id} spec={c} />)}
+          </div>
+        </section>
+      )}
+
+      {/* ─── 인사이트 ─── */}
       {data.insights.length > 0 && (
         <section>
-          <h2 className="text-sm font-semibold text-slate-700 mb-3">인사이트 · 가드레일</h2>
-          <div className="space-y-3">
+          <div className="section-eyebrow mb-3">인사이트 · 가드레일 · {data.insights.length}개</div>
+          <div className="space-y-2.5">
             {data.insights.map((ins, i) => <InsightCard key={i} insight={ins} />)}
           </div>
         </section>
       )}
 
-      {/* BUILD 리포트 */}
+      {/* ─── BUILD 리포트 (U/I/L/D — B는 위에서 노출) ─── */}
       {data.report && (
         <section>
-          <h2 className="text-sm font-semibold text-slate-700 mb-3">BUILD 리포트</h2>
-          <ReportPanel report={data.report} />
+          <div className="section-eyebrow mb-3">상세 리포트 · BUILD 프레임</div>
+          <ReportPanel report={data.report} hideBluf />
         </section>
       )}
 
-      {/* 원시 지표 — Expert audience 또는 토글 */}
+      {/* ─── 원시 지표 (기본 접힘) ─── */}
       <section>
-        <h2 className="text-sm font-semibold text-slate-700 mb-3">원시 지표</h2>
-        <div className="card p-4">
-          <pre className="text-xs overflow-x-auto text-slate-700">
-            {JSON.stringify(data.raw_metrics, null, 2)}
-          </pre>
-        </div>
+        <div className="section-eyebrow mb-2">원시 지표 (JSON)</div>
+        <RawMetricsDisclosure data={data.raw_metrics} />
       </section>
     </div>
   );
 }
 
-function ModeSwitch({ current, portfolioId }: { current: string; portfolioId: string }) {
-  const modes = ['quick', 'standard', 'full'];
+function Meta({ label, value, mono, highlight }: { label: string; value: string; mono?: boolean; highlight?: boolean }) {
   return (
-    <div className="inline-flex rounded-md border border-slate-300 overflow-hidden text-xs">
-      {modes.map((m) => (
+    <span className="inline-flex items-baseline gap-1">
+      <span className="text-slate-400">{label}</span>
+      <span className={[
+        highlight ? 'text-blue-600 font-semibold' : 'text-slate-700 font-medium',
+        mono ? 'font-mono tabular' : '',
+      ].join(' ')}>{value}</span>
+    </span>
+  );
+}
+
+function Sep() { return <span className="text-slate-300">·</span>; }
+
+function ModeSwitch({ current, portfolioId }: { current: string; portfolioId: string }) {
+  const modes: { key: string; label: string }[] = [
+    { key: 'quick', label: 'Quick' },
+    { key: 'standard', label: 'Standard' },
+    { key: 'full', label: 'Full' },
+  ];
+  return (
+    <div className="inline-flex rounded-md bg-slate-100 p-0.5 text-[12px] font-medium">
+      {modes.map(m => (
         <Link
-          key={m}
-          href={`/dashboard/${portfolioId}?mode=${m}`}
-          className={`px-3 py-1.5 border-r border-slate-300 last:border-r-0 ${
-            current === m ? 'bg-blue-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-50'
-          }`}
+          key={m.key}
+          href={`/dashboard/${portfolioId}?mode=${m.key}`}
+          className={[
+            'px-3 py-1.5 rounded-md transition',
+            current === m.key
+              ? 'bg-white text-slate-900 shadow-sm ring-1 ring-slate-200/80'
+              : 'text-slate-600 hover:text-slate-900',
+          ].join(' ')}
         >
-          {m}
+          {m.label}
         </Link>
       ))}
     </div>
