@@ -10,7 +10,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-omnidash}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-omnidash}
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      # 127.0.0.1로만 바인드 — 외부 공개 X, 호스트에서 psql만 가능
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -40,7 +41,9 @@ services:
       SKILLS_CONFIG_PATH: ${SKILLS_CONFIG_PATH:-}
       JAVA_OPTS: ${JAVA_OPTS:--Xms256m -Xmx768m}
     ports:
-      - "${BACKEND_PORT:-8080}:8080"
+      # 백엔드는 외부에 직접 노출하지 않는다. frontend Next.js가 /api/* rewrites로 docker 내부망을 통해 호출.
+      # 호스트에서 디버깅 시에만 127.0.0.1로 접근 가능.
+      - "127.0.0.1:${BACKEND_PORT:-8080}:8080"
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/actuator/health"]
       interval: 10s
@@ -56,6 +59,8 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8080}
+        # rewrites destination이 빌드 시점에 평가되므로 빌드 ARG로도 전달.
+        INTERNAL_API_BASE_URL: ${INTERNAL_API_BASE_URL:-http://backend:8080}
     container_name: omnidash-frontend
     restart: unless-stopped
     depends_on:

@@ -12,11 +12,27 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org)
 [![Skills](https://img.shields.io/badge/Skills.md-v3.0.0-2563eb)](docs/final_skills/INDEX.md)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](#-license)
+[![Live](https://img.shields.io/badge/live-project.rearleg.com-22c55e)](https://project.rearleg.com)
+
+---
+
+## 🌍 Live
+
+| | |
+|---|---|
+| **운영 URL** | <https://project.rearleg.com> |
+| **TLS** | Caddy 자동 발급 (Let's Encrypt) |
+| **라우팅** | Caddy(443) → frontend 컨테이너 (호스트 :18501) |
+| **API 경로** | `/api/*` — Next.js `rewrites()`가 docker 내부망의 backend로 same-origin 프록시 |
+| **DB** | postgres 컨테이너 (127.0.0.1 바인드만, 외부 미노출) |
+
+브라우저는 항상 `https://project.rearleg.com/...`만 호출 — 별도 API 서브도메인이나 CORS 설정 없이 동작합니다. 자세한 구성은 [프로덕션 배포 → 실제 운영 예시](#운영-예시-projectrearlegcom) 참조.
 
 ---
 
 ## 📑 목차
 
+- [Live](#-live)
 - [핵심 기능](#-핵심-기능)
 - [아키텍처](#-아키텍처)
 - [Quick Start (5분)](#-quick-start-5분)
@@ -283,6 +299,58 @@ curl http://localhost:18080/api/ping
 ## 🌐 프로덕션 배포
 
 `docker-compose.yml`은 어디든 그대로 이식 가능 (EC2, Fly.io, Render, GCP VM, 자체 서버 ...).
+
+### 운영 예시: project.rearleg.com
+
+이 저장소는 <https://project.rearleg.com>으로 서비스 중입니다. **same-origin + 단일 도메인** 패턴 — API 서브도메인을 따로 두지 않고, Next.js `rewrites()`가 `/api/*`를 docker 내부망의 backend로 프록시합니다 (CORS 무시).
+
+```
+                                                                    docker network (omnidash-net)
+                                                                    ┌────────────────────────┐
+[Browser]─https://project.rearleg.com─►[Caddy :443]─►host:18501─►[frontend (Next.js)]──/api/*──►[backend :8080]
+                                                                    │                        │
+                                                                    │ INTERNAL_API_BASE_URL  │
+                                                                    │ = http://backend:8080  │
+                                                                    └────────────────────────┘
+```
+
+**프로덕션 `.env` 핵심값:**
+
+```env
+# 호스트 포트 — Caddy가 18501로 라우팅 중이라 frontend는 이 포트를 사용.
+# backend/postgres는 127.0.0.1로만 바인드되어 외부 노출 X.
+FRONTEND_PORT=18501
+BACKEND_PORT=18802
+POSTGRES_PORT=15432
+
+# 브라우저가 호출할 베이스. same-origin이므로 운영 도메인 그대로.
+NEXT_PUBLIC_API_BASE_URL=https://project.rearleg.com
+# Next.js 서버(SSR + rewrites)가 컴포즈 내부망으로 호출.
+INTERNAL_API_BASE_URL=http://backend:8080
+
+CORS_ALLOWED_ORIGINS=https://project.rearleg.com
+POSTGRES_PASSWORD=<32자 이상 랜덤>
+```
+
+**Caddyfile (한 블록):**
+
+```caddy
+project.rearleg.com {
+  encode gzip zstd
+  reverse_proxy host.docker.internal:18501
+}
+```
+
+> Caddy가 별도 컴포즈로 떠 있는 환경에서는 `extra_hosts: ["host.docker.internal:host-gateway"]`가 필요합니다.
+
+**기동:**
+
+```bash
+docker compose --env-file .env up -d --build
+# 또는: make up
+```
+
+`NEXT_PUBLIC_API_BASE_URL`과 `INTERNAL_API_BASE_URL`은 **빌드 시점**에 정적 번들 / Next.js 라우트 매니페스트에 박힙니다. 도메인이나 내부 호스트가 바뀌면 `docker compose build frontend` 재빌드 필요.
 
 ### 단일 호스트 + Caddy (가장 간단)
 

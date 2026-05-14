@@ -10,9 +10,13 @@ RUN npm install --no-audit --no-fund
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# 빌드 타임 환경변수 (정적 번들에 박힌다)
+# 빌드 타임 환경변수
+# NEXT_PUBLIC_API_BASE_URL: 정적 번들에 박힌다 (브라우저용)
+# INTERNAL_API_BASE_URL: next.config.js의 rewrites destination 평가에 사용 (서버용)
 ARG NEXT_PUBLIC_API_BASE_URL
+ARG INTERNAL_API_BASE_URL
 ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+ENV INTERNAL_API_BASE_URL=${INTERNAL_API_BASE_URL}
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
