@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360" fill="none">
+  <defs>
+    <linearGradient id="line1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0"/>
+      <stop offset="30%" stop-color="#2563eb" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0.7"/>
+    </linearGradient>
+    <linearGradient id="line2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0"/>
+      <stop offset="40%" stop-color="#7c3aed" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="line3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0d9488" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#0d9488" stop-opacity="0.65"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="line4" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#94a3b8" stop-opacity="0"/>
+      <stop offset="60%" stop-color="#94a3b8" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#94a3b8" stop-opacity="0.3"/>
+    </linearGradient>
+
+    <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.22"/>
+      <stop offset="60%" stop-color="#2563eb" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.16"/>
+      <stop offset="60%" stop-color="#7c3aed" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+    </radialGradient>
+
+    <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.7" fill="#cbd5e1" fill-opacity="0.45"/>
+    </pattern>
+  </defs>
+
+  <!-- Ambient glows -->
+  <circle cx="380" cy="110" r="200" fill="url(#glow1)"/>
+  <circle cx="100" cy="270" r="160" fill="url(#glow2)"/>
+
+  <!-- Subtle dot grid (upper portion only) -->
+  <rect x="0" y="0" width="320" height="180" fill="url(#dots)" opacity="0.45"/>
+
+  <!-- 4 stylized asset-line curves, ascending diversity -->
+  <path d="M 20 280 C 80 270, 120 250, 160 240 C 200 230, 240 200, 280 180 C 320 160, 380 140, 460 90"
+        stroke="url(#line1)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M 20 300 C 80 290, 140 270, 200 250 C 250 235, 310 220, 360 200 C 410 180, 440 165, 460 145"
+        stroke="url(#line2)" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M 20 320 C 100 310, 160 280, 220 270 C 280 260, 340 245, 400 225 C 430 215, 450 205, 460 195"
+        stroke="url(#line3)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M 20 340 C 100 335, 160 320, 220 310 C 280 305, 340 295, 400 285 C 430 282, 450 280, 460 278"
+        stroke="url(#line4)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="4 5"/>
+
+  <!-- Endpoint markers for top 3 lines -->
+  <circle cx="460" cy="90" r="4" fill="#2563eb"/>
+  <circle cx="460" cy="90" r="9" fill="#2563eb" fill-opacity="0.18"/>
+  <circle cx="460" cy="145" r="3" fill="#7c3aed"/>
+  <circle cx="460" cy="195" r="3" fill="#0d9488"/>
+</svg>

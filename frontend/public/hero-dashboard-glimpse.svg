@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 420" width="560" height="420" fill="none">
+  <defs>
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#f8fafc" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="chartFill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="kpiTopBand" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#2563eb" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="20" flood-color="#0f172a" flood-opacity="0.10"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.04"/>
+    </filter>
+    <style>
+      .num { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums slashed-zero; }
+      .label { font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; }
+      .heading { font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif; letter-spacing: -0.03em; }
+    </style>
+  </defs>
+
+  <!-- Outer card -->
+  <rect x="20" y="16" width="520" height="388" rx="14" fill="url(#cardBg)" stroke="#e2e8f0" stroke-width="1" filter="url(#cardShadow)"/>
+  <!-- Subtle top accent line (matches kpi-hero ::before) -->
+  <rect x="20" y="16" width="520" height="1" fill="url(#kpiTopBand)"/>
+
+  <!-- Card header -->
+  <text x="44" y="50" class="label" font-size="10" font-weight="600" fill="#64748b">PORTFOLIO · KRW</text>
+  <text x="44" y="78" class="heading" font-size="22" font-weight="700" fill="#0f172a">03_multi_asset</text>
+
+  <!-- Mode toggle (visual only) -->
+  <g transform="translate(420, 40)">
+    <rect width="100" height="26" rx="6" fill="#f1f5f9"/>
+    <rect x="2" y="2" width="32" height="22" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="18" y="18" class="label" font-size="9" font-weight="600" fill="#0f172a" text-anchor="middle">Q</text>
+    <text x="52" y="18" class="label" font-size="9" font-weight="600" fill="#64748b" text-anchor="middle">S</text>
+    <text x="82" y="18" class="label" font-size="9" font-weight="600" fill="#64748b" text-anchor="middle">F</text>
+  </g>
+
+  <!-- Hero KPI row: 총 수익률 + CAGR -->
+  <g transform="translate(44, 100)">
+    <text class="label" font-size="9" font-weight="600" fill="#64748b">총 수익률</text>
+    <text y="34" class="num heading" font-size="36" font-weight="700" fill="#059669">+102.08%</text>
+    <text y="54" class="num" font-size="10" fill="#94a3b8">cumulative · n=319</text>
+  </g>
+  <g transform="translate(280, 100)">
+    <text class="label" font-size="9" font-weight="600" fill="#64748b">CAGR</text>
+    <text y="34" class="num heading" font-size="36" font-weight="700" fill="#059669">+74.02%</text>
+    <text y="54" class="num" font-size="10" fill="#94a3b8">cagr · n=319</text>
+  </g>
+
+  <!-- Divider -->
+  <line x1="44" y1="180" x2="516" y2="180" stroke="#e2e8f0" stroke-dasharray="2 4"/>
+
+  <!-- Mini KPIs row -->
+  <g transform="translate(44, 196)" font-family="Pretendard Variable, sans-serif">
+    <text class="label" font-size="8" font-weight="600" fill="#64748b">SHARPE</text>
+    <text y="22" class="num" font-size="18" font-weight="600" fill="#0f172a">1.59</text>
+  </g>
+  <g transform="translate(140, 196)">
+    <g>
+      <text class="label" font-size="8" font-weight="600" fill="#64748b">MDD</text>
+      <rect x="32" y="-9" width="38" height="14" rx="3" fill="#fef3c7"/>
+      <text x="51" y="1" class="label" font-size="8" font-weight="700" fill="#a16207" text-anchor="middle">WARN</text>
+    </g>
+    <text y="22" class="num" font-size="18" font-weight="600" fill="#dc2626">−19.78%</text>
+  </g>
+  <g transform="translate(280, 196)">
+    <text class="label" font-size="8" font-weight="600" fill="#64748b">σ ANNUAL</text>
+    <text y="22" class="num" font-size="18" font-weight="600" fill="#0f172a">32.48%</text>
+  </g>
+  <g transform="translate(420, 196)">
+    <text class="label" font-size="8" font-weight="600" fill="#64748b">CALMAR</text>
+    <text y="22" class="num" font-size="18" font-weight="600" fill="#0f172a">3.74</text>
+  </g>
+
+  <!-- Chart area -->
+  <g transform="translate(44, 246)">
+    <!-- Chart card -->
+    <rect width="472" height="142" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="14" y="22" class="label" font-size="9" font-weight="600" fill="#64748b">누적 수익률 · vs KODEX 200</text>
+
+    <!-- Y axis labels -->
+    <text x="14" y="50" class="num" font-size="9" fill="#94a3b8">100%</text>
+    <text x="14" y="80" class="num" font-size="9" fill="#94a3b8">50%</text>
+    <text x="14" y="110" class="num" font-size="9" fill="#94a3b8">0%</text>
+
+    <!-- Gridlines -->
+    <line x1="48" y1="46" x2="460" y2="46" stroke="#f1f5f9" stroke-dasharray="2 4"/>
+    <line x1="48" y1="76" x2="460" y2="76" stroke="#f1f5f9" stroke-dasharray="2 4"/>
+    <line x1="48" y1="106" x2="460" y2="106" stroke="#f1f5f9" stroke-dasharray="2 4"/>
+    <line x1="48" y1="130" x2="460" y2="130" stroke="#e2e8f0"/>
+
+    <!-- Benchmark line (grey dashed) -->
+    <path d="M 48 116 L 100 112 L 152 108 L 204 110 L 256 104 L 308 100 L 360 98 L 412 92 L 460 88"
+          stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 4" fill="none"/>
+
+    <!-- Portfolio line gradient area -->
+    <path d="M 48 116 L 80 110 L 112 102 L 144 108 L 176 96 L 208 84 L 240 88 L 272 72 L 304 64 L 336 70 L 368 56 L 400 48 L 432 44 L 460 38 L 460 130 L 48 130 Z"
+          fill="url(#chartFill)"/>
+    <!-- Portfolio line -->
+    <path d="M 48 116 L 80 110 L 112 102 L 144 108 L 176 96 L 208 84 L 240 88 L 272 72 L 304 64 L 336 70 L 368 56 L 400 48 L 432 44 L 460 38"
+          stroke="#0f172a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Last point dot -->
+    <circle cx="460" cy="38" r="4" fill="#0f172a"/>
+    <circle cx="460" cy="38" r="6" fill="#0f172a" fill-opacity="0.18"/>
+
+    <!-- Legend -->
+    <g transform="translate(290, 122)">
+      <line x1="0" y1="-3" x2="12" y2="-3" stroke="#0f172a" stroke-width="2"/>
+      <text x="16" y="0" class="label" font-size="9" font-weight="600" fill="#0f172a">PORTFOLIO</text>
+      <line x1="100" y1="-3" x2="112" y2="-3" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <text x="116" y="0" class="label" font-size="9" font-weight="600" fill="#64748b">KODEX 200</text>
+    </g>
+  </g>
+</svg>
