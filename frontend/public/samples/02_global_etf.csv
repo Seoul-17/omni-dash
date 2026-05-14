@@ -1,0 +1,8 @@
+asset_id,asset_name,asset_class,sector,quantity,avg_cost,base_currency,acquired_at
+SPY,SPDR S&P 500 ETF,etf,Diversified,15,485.20,USD,2025-01-15
+QQQ,Invesco QQQ Trust,etf,Information Technology,10,480.50,USD,2025-06-01
+VEA,Vanguard FTSE Developed Markets,etf,Diversified,20,52.30,USD,2025-03-22
+VWO,Vanguard FTSE Emerging Markets,etf,Diversified,30,46.80,USD,2025-04-10
+GLD,SPDR Gold Trust,etf,Commodity,8,210.40,USD,2025-08-14
+TLT,iShares 20+ Year Treasury Bond,etf,Fixed Income,12,92.10,USD,2025-09-25
+ARKK,ARK Innovation ETF,etf,Information Technology,5,52.80,USD,2025-11-03

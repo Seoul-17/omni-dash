@@ -42,6 +42,21 @@ export async function uploadCsv(
   });
 }
 
+/**
+ * /public/samples/{filename}에 번들된 CSV를 fetch하여 그대로 업로드 파이프라인에 흘려보낸다.
+ * 백엔드 입장에서는 사용자 업로드와 완전히 동일 — 추가 endpoint 불필요.
+ */
+export async function uploadSample(
+  filename: string,
+  options: { baseCurrency?: string; riskProfile?: string; audience?: string; locale?: string; mode?: string } = {}
+): Promise<UploadResponse> {
+  const res = await fetch(`/samples/${filename}`);
+  if (!res.ok) throw new Error(`샘플 데이터를 불러올 수 없습니다: ${filename}`);
+  const blob = await res.blob();
+  const file = new File([blob], filename, { type: 'text/csv' });
+  return uploadCsv(file, options);
+}
+
 export async function listPortfolios(): Promise<PortfolioSummary[]> {
   return jsonFetch<PortfolioSummary[]>('/api/portfolios');
 }

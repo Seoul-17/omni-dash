@@ -1,5 +1,6 @@
 import UploadDropzone from '@/components/UploadDropzone';
 import PortfolioList from '@/components/PortfolioList';
+import SampleShowcase from '@/components/SampleShowcase';
 
 export default function HomePage() {
   return (
@@ -124,8 +125,11 @@ export default function HomePage() {
       </section>
 
       {/* ─── 본문 ─── */}
-      <div className="mx-auto max-w-5xl px-6 py-14 space-y-14">
+      <div className="mx-auto max-w-5xl px-6 py-14 space-y-12">
         <UploadDropzone />
+
+        {/* 샘플 데이터 — 빈 세션에서 즉시 체험 */}
+        <SampleShowcase />
 
         {/* 최근 업로드 */}
         <section>

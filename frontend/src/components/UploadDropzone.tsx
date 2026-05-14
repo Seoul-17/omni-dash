@@ -92,6 +92,16 @@ export default function UploadDropzone() {
             <p className="text-[12px] text-slate-500 mt-1.5 font-mono tabular">
               잔고 스냅샷 · 거래내역 · 최대 10MB
             </p>
+            <p className="text-[12px] text-slate-500 mt-3">
+              CSV가 없나요?{' '}
+              <a
+                href="#sample-showcase"
+                onClick={(e) => e.stopPropagation()}
+                className="text-blue-600 hover:text-blue-700 font-medium underline-offset-2 hover:underline"
+              >
+                샘플 데이터로 둘러보기 ↓
+              </a>
+            </p>
           </>
         )}
       </div>
